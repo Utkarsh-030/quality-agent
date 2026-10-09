@@ -1,0 +1,7 @@
+{
+  "part": "Himalayan frame bracket - bore diameter (mm)",
+  "lsl": 24.95,
+  "usl": 25.05,
+  "measurements": [25.00, 25.01, 25.02, 25.02, 25.03, 25.04, 25.04, 25.05, 25.06, 25.07],
+  "defects": ["dimension out of spec", "weld porosity", "dimension out of spec", "scratch", "dimension out of spec", "weld porosity"]
+}
