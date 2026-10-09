@@ -1,0 +1,33 @@
+{
+  "agent": "Manufacturing Quality Inspection Agent",
+  "type": "Agentic AI (ReAct loop: Reason -> Act -> Observe)",
+  "input_schema": {
+    "type": "object",
+    "required": ["measurements", "lsl", "usl"],
+    "properties": {
+      "part": {"type": "string"},
+      "measurements": {"type": "array", "items": {"type": "number"}},
+      "lsl": {"type": "number", "description": "Lower specification limit"},
+      "usl": {"type": "number", "description": "Upper specification limit"},
+      "defects": {"type": "array", "items": {"type": "string"}}
+    }
+  },
+  "llm_message_protocol": {
+    "tool_call": {"thought": "string", "action": "tool name", "args": "object"},
+    "final": {"final_answer": {"verdict": "ACCEPT | REJECT", "reasons": ["string"], "recommended_actions": ["string"]}}
+  },
+  "tools": [
+    {"name": "check_tolerance", "args": {"measurements": "number[]", "lsl": "number", "usl": "number"},
+     "returns": "out_of_tolerance count, reject_rate_pct, violations[]"},
+    {"name": "calculate_capability", "args": {"measurements": "number[]", "lsl": "number", "usl": "number"},
+     "returns": "mean, std_dev, cp, cpk"},
+    {"name": "detect_trend", "args": {"measurements": "number[]"},
+     "returns": "drift_detected, longest_monotonic_run, longest_same_side_run"},
+    {"name": "pareto_defects", "args": {"defects": "string[]"},
+     "returns": "ranking[] with count, pct, cumulative_pct"},
+    {"name": "suggest_root_causes", "args": {"defect": "string"},
+     "returns": "candidate_causes[], five_why_start"}
+  ],
+  "decision_rule": "ACCEPT only if 0 parts out of tolerance AND Cpk >= 1.33 AND no drift",
+  "safety": ["max_steps loop limit", "tool errors returned as observations", "API key only via environment variable"]
+}
