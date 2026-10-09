@@ -1,0 +1,2 @@
+# Runtime uses only the Python standard library.
+pytest>=7.0   # for tests only
